@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartFlow – Signal Control</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="logo">
+    <span>SmartFlow</span>
+    <small>TRAFFIC MANAGEMENT v2.1</small>
+  </div>
+
+  <nav class="nav">
+    <a class="nav-item" href="http://localhost:5000/index.html">Dashboard</a>
+    <a class="nav-item active" href="http://localhost:5000/signal-control.html">Signal Control <span class="nav-badge">3</span></a>
+    <a class="nav-item" href="#">CCTV Monitor</a>
+    <a class="nav-item" href="http://localhost:5000/analytics.html">Analytics</a>
+    <a class="nav-item" href="#">Incidents <span class="nav-badge">2</span></a>
+    <a class="nav-item" href="#">Route Planner</a>
+    <a class="nav-item" href="#">Settings</a>
+  </nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-title">Signal <span>Control Panel</span></div>
+    <div class="time-badge" id="clock">--:--:--</div>
+  </div>
+
+  <!-- Junction Cards (rendered by JS) -->
+  <div class="junctions-grid" id="jGrid"></div>
+
+  <!-- AI Optimization + Manual Override -->
+  <div class="ai-section">
+
+    <!-- AI Phase Optimization -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">AI Phase Optimization</span>
+        <span class="panel-badge badge-live">AUTO</span>
+      </div>
+      <div class="panel-body">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+          Current phase plan for J3 Poonamallee – AI recommended adjustment:
+        </p>
+
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px;">CURRENT PLAN</div>
+        <div class="phase-timeline">
+          <div class="phase-seg red-phase"    style="flex:4">RED 40s</div>
+          <div class="phase-seg yellow-phase" style="flex:0.5">Y 5s</div>
+          <div class="phase-seg green-phase"  style="flex:3">GREEN 30s</div>
+          <div class="phase-seg yellow-phase" style="flex:0.5">Y 5s</div>
+        </div>
+
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px;margin-top:12px;">AI RECOMMENDED</div>
+        <div class="phase-timeline">
+          <div class="phase-seg red-phase"    style="flex:2.5">RED 25s</div>
+          <div class="phase-seg yellow-phase" style="flex:0.5">Y 5s</div>
+          <div class="phase-seg green-phase active" style="flex:5">GREEN 50s</div>
+          <div class="phase-seg yellow-phase" style="flex:0.5">Y 5s</div>
+        </div>
+
+        <div class="ai-rec">
+          <div class="ai-rec-title">🤖 AI Reasoning</div>
+          <div class="ai-rec-text">
+            Sensor data shows 3.2× more vehicles queued on the green direction.
+            Extending green phase by 20s reduces average wait by ~35%.
+            Applied across 6 junctions, estimated 18% improvement in throughput.
+          </div>
+        </div>
+
+        <button class="apply-btn" onclick="applyAI()">✓ Apply AI Recommendation</button>
+      </div>
+    </div>
+
+    <!-- Manual Phase Tuning -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Manual Phase Tuning</span>
+        <span class="panel-badge badge-info">OVERRIDE</span>
+      </div>
+      <div class="panel-body">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">
+          Manually adjust signal timings for the selected junction:
+        </p>
+
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>🔴 Red Phase</span>
+            <strong id="redVal">40s</strong>
+          </div>
+          <input type="range" id="redSlider" min="10" max="120" value="40" />
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>🟡 Yellow Phase</span>
+            <strong id="yelVal">5s</strong>
+          </div>
+          <input type="range" id="yelSlider" min="3" max="15" value="5" />
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-label">
+            <span>🟢 Green Phase</span>
+            <strong id="grnVal">30s</strong>
+          </div>
+          <input type="range" id="grnSlider" min="10" max="120" value="30" />
+        </div>
+
+        <div style="background:var(--surface2);border-radius:8px;padding:12px;margin:12px 0;">
+          <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px;">CYCLE TIME</div>
+          <div style="font-size:20px;font-family:'Syne',sans-serif;font-weight:700;color:var(--accent4);" id="cycleTime">80s</div>
+        </div>
+
+        <button class="apply-btn"
+          style="background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.3);color:var(--accent2);"
+          onclick="applyManual()">
+          ⚡ Apply Manual Override
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">BCSE203E · Web Programming · VIT · Winter 2025–26</div>
+    <div class="footer-badges">
+      <span class="foot-badge">HTML5</span>
+      <span class="foot-badge">CSS3</span>
+      <span class="foot-badge">JavaScript</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- Scripts -->
+<script src="js/shared.js"></script>
+<script src="js/signal-control.js"></script>
+
+</body>
+</html>

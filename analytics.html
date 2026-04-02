@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartFlow – Analytics</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="logo">
+    <span>SmartFlow</span>
+    <small>TRAFFIC MANAGEMENT v2.1</small>
+  </div>
+
+  <nav class="nav">
+    <a class="nav-item" href="http://localhost:5000/index.html">Dashboard</a>
+    <a class="nav-item" href="http://localhost:5000/signal-control.html">Signal Control <span class="nav-badge">3</span></a>
+    <a class="nav-item" href="#">CCTV Monitor</a>
+    <a class="nav-item active" href="http://localhost:5000/analytics.html">Analytics</a>
+    <a class="nav-item" href="#">Incidents <span class="nav-badge">2</span></a>
+    <a class="nav-item" href="#">Route Planner</a>
+    <a class="nav-item" href="#">Settings</a>
+  </nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-title">Traffic <span>Analytics</span></div>
+    <div class="time-badge" id="clock">--:--:--</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active">Daily</div>
+    <div class="tab">Weekly</div>
+    <div class="tab">Monthly</div>
+    <div class="tab">Custom</div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="val">24,182</div>
+      <div class="label">TOTAL VEHICLES</div>
+      <div class="change up">↑ 7.4% vs yesterday</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--accent2)">41 min</div>
+      <div class="label">AVG JOURNEY TIME</div>
+      <div class="change down">↑ 8 min from baseline</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--accent3)">89%</div>
+      <div class="label">SIGNAL EFFICIENCY</div>
+      <div class="change up">↑ 3% after AI tune</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--accent4)">4</div>
+      <div class="label">INCIDENTS TODAY</div>
+      <div class="change down">↑ 1 from daily avg</div>
+    </div>
+  </div>
+
+  <!-- Line Chart + Zone Congestion -->
+  <div class="grid-2col">
+
+    <!-- 24h Line Chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">24-Hour Vehicle Volume</span>
+        <span class="panel-badge badge-info">TODAY</span>
+      </div>
+      <div class="panel-body">
+        <div class="line-chart">
+          <svg class="linechart" viewBox="0 0 500 180" preserveAspectRatio="none" id="lineChartSVG">
+            <!-- Grid lines -->
+            <line x1="40" y1="20"  x2="490" y2="20"  stroke="#1f2b40" stroke-width="1"/>
+            <line x1="40" y1="60"  x2="490" y2="60"  stroke="#1f2b40" stroke-width="1"/>
+            <line x1="40" y1="100" x2="490" y2="100" stroke="#1f2b40" stroke-width="1"/>
+            <line x1="40" y1="140" x2="490" y2="140" stroke="#1f2b40" stroke-width="1"/>
+            <!-- Y labels -->
+            <text x="30" y="23"  text-anchor="end" class="axis-label">1200</text>
+            <text x="30" y="63"  text-anchor="end" class="axis-label">900</text>
+            <text x="30" y="103" text-anchor="end" class="axis-label">600</text>
+            <text x="30" y="143" text-anchor="end" class="axis-label">300</text>
+            <!-- Today area fill -->
+            <defs>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="var(--accent)" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path id="areaPath"  fill="url(#areaGrad)" d=""/>
+            <path id="linePath"  fill="none" stroke="var(--accent)"  stroke-width="2" stroke-linejoin="round"/>
+            <path id="linePath2" fill="none" stroke="var(--muted)"   stroke-width="1.5" stroke-dasharray="4,3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;">
+          <span style="display:flex;align-items:center;gap:5px;color:var(--muted);">
+            <span style="width:16px;height:2px;background:var(--accent);display:inline-block;"></span>Today
+          </span>
+          <span style="display:flex;align-items:center;gap:5px;color:var(--muted);">
+            <span style="width:16px;height:2px;background:var(--muted);display:inline-block;border-top:1px dashed var(--muted);"></span>Yesterday
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone Congestion -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Zone Congestion Levels</span>
+        <span class="panel-badge badge-live">LIVE</span>
+      </div>
+      <div class="panel-body">
+        <div id="zoneChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Junction Table + Incident Analysis -->
+  <div class="grid-2col">
+
+    <!-- Junction Efficiency -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Junction Efficiency Ranking</span>
+        <span class="panel-badge badge-info">TODAY</span>
+      </div>
+      <div class="panel-body" style="padding:4px 0;">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Junction</th>
+              <th>Throughput</th>
+              <th>Avg Wait</th>
+              <th>Efficiency</th>
+            </tr>
+          </thead>
+          <tbody id="juncTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Incident Analysis -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Incident Analysis – Last 30 Days</span>
+        <span class="panel-badge badge-info">MONTHLY</span>
+      </div>
+      <div class="panel-body">
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:8px;">BY TYPE</div>
+          <div id="incidentBars"></div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:14px;">
+          <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:8px;">BY TIME OF DAY</div>
+          <div id="timeBars"></div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;">TOTAL</div>
+            <div style="font-size:22px;font-family:'Syne',sans-serif;font-weight:800;color:var(--red);">47</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;">RESOLVED</div>
+            <div style="font-size:22px;font-family:'Syne',sans-serif;font-weight:800;color:var(--accent3);">43</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;">AVG CLEAR</div>
+            <div style="font-size:22px;font-family:'Syne',sans-serif;font-weight:800;color:var(--accent4);">14m</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">BCSE203E · Web Programming · VIT · Winter 2025–26</div>
+    <div class="footer-badges">
+      <span class="foot-badge">HTML5</span>
+      <span class="foot-badge">CSS3</span>
+      <span class="foot-badge">JavaScript</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- Scripts -->
+<script src="js/shared.js"></script>
+<script src="js/analytics.js"></script>
+
+</body>
+</html>
