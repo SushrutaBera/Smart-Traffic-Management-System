@@ -4,19 +4,19 @@
 // =============================================
 
 // --- Animated KPI counters ---
-// function animKPI(id, base, delta, suffix = '') {
-//   setInterval(() => {
-//     const v = base + Math.floor((Math.random() - 0.5) * delta);
-//     const el = document.getElementById(id);
-//     if (el) {
-//       el.textContent = suffix ? v + suffix : v.toLocaleString();
-//     }
-//   }, 3000);
-// }
+function animKPI(id, base, delta, suffix = '') {
+  setInterval(() => {
+    const v = base + Math.floor((Math.random() - 0.5) * delta);
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = suffix ? v + suffix : v.toLocaleString();
+    }
+  }, 3000);
+}
 
-// animKPI('kpi1', 2847, 120);
-// animKPI('kpi2', 34, 8);
-// animKPI('kpi4', 63, 10, '%');
+animKPI('kpi1', 2847, 120);
+animKPI('kpi2', 34, 8);
+animKPI('kpi4', 63, 10, '%');
 
 // --- Bar Chart (hourly traffic volume) ---
 const hours    = ['06','07','08','09','10','11','12','13','14','15'];
